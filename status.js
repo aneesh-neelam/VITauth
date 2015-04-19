@@ -1,6 +1,8 @@
 /*
- *  VITfaculty
- *  Copyright (C) 2014  Kishore Narendran <kishore.narendran09@gmail.com>
+ *  VITauth
+ *  Copyright (C) 2015  Kishore Narendran <kishore.narendran09@gmail.com>
+ *  Copyright (C) 2015  Aneesh Neelam <neelam.aneesh@gmail.com>
+ *  Copyright (C) 2015  Aarthy Kolachalam Chandrasekhar <kcaarthy@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,35 +18,37 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+'use strict';
+
 var status = {
-    success: {
-        message: 'Successful execution',
-        code: 1
-    },
-    failure: {
-        message: 'Failure',
-        code: 0
-    },
-    incorrectCredentials: {
-        message: 'Incorrect credentials',
-        code: 11
-    },
-    invalidToken: {
-        message: 'Invalid token',
-        code: 12
-    },
-    semesterNotFound: {
-        message: 'Semester not found',
-        code: 13
-    },
-    dateNotFound: {
-        message: 'Date not found',
-        code: 14
-    },
-    unknownClassNumber: {
-        message: 'Unknown class number',
-        code: 15
-    }
+  success: {
+    message: 'Successful execution',
+    code: 1
+  },
+  failure: {
+    message: 'Failure',
+    code: 0
+  },
+  incorrectCredentials: {
+    message: 'Incorrect credentials',
+    code: 11
+  },
+  invalidToken: {
+    message: 'Invalid token',
+    code: 12
+  },
+  semesterNotFound: {
+    message: 'Semester not found',
+    code: 13
+  },
+  dateNotFound: {
+    message: 'Date not found',
+    code: 14
+  },
+  unknownClassNumber: {
+    message: 'Unknown class number',
+    code: 15
+  }
 };
 
 module.exports = status;

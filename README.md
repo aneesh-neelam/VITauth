@@ -1,16 +1,14 @@
-VITfaculty
-==========
+VITauth
+=======
 
-VITfaculty Backend
+An API server for the VIT University adminstration and faculty
 
-This is currently hosted [here] (https://vitfaculty.herokuapp.com/)
+Check out the [Project Wiki](https://github.com/aneesh-neelam/VITauth/wiki) for more information.
 
-For the API Documentation, check out the [Project Wiki] (https://github.com/kishore-narendran/VITfaculty-Backend/wiki)
-
-Please report any bugs or issues [here] (https://github.com/kishore-narendran/VITfaculty-Backend/issues)
+Please report any bugs or issues [here](https://github.com/aneesh-neelam/VITauth/issues).
 
 #### Instructions for Installation:
-###### Install [io.js](https://iojs.org/en/index.html)
+###### Install [io.js](https://iojs.org/en/index.html) (Latest Stable Release)
 ###### Install all dependencies
     $ npm install
 ###### Run the server locally

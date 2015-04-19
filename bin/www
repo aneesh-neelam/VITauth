@@ -1,9 +1,10 @@
-#!/usr/bin/env node
+#!/usr/bin/env iojs
 
 /*
- *  VITfaculty
- *  Copyright (C) 2014  Aneesh Neelam <neelam.aneesh@gmail.com>
- *  Copyright (C) 2014  Kishore Narendran <kishore.narendran09@gmail.com>
+ *  VITauth
+ *  Copyright (C) 2015  Kishore Narendran <kishore.narendran09@gmail.com>
+ *  Copyright (C) 2015  Aneesh Neelam <neelam.aneesh@gmail.com>
+ *  Copyright (C) 2015  Aarthy Kolachalam Chandrasekhar <kcaarthy@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,30 +20,86 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+'use strict';
+
+var http = require('http');
+var path = require('path');
+
+var newrelic;
 if (process.env.NEWRELIC_APP_NAME && process.env.NEWRELIC_LICENSE) {
-    require('newrelic');
+    newrelic = require('newrelic');
 }
 
 var log;
 if (process.env.LOGENTRIES_TOKEN) {
-    var logentries = require('node-logentries');
+    let logentries = require('node-logentries');
     log = logentries.logger({
-                                token: process.env.LOGENTRIES_TOKEN
-                            });
+        token: process.env.LOGENTRIES_TOKEN
+    });
 }
-
-var path = require('path');
 
 var app = require(path.join(__dirname, '..', 'app'));
 
-app.set('port', process.env.PORT || 3000);
+let port = normalizePort(process.env.PORT || '3000');
 
-var onBind = function () {
-  var config = {
-        port: process.env.PORT || 3000,
+app.set('port', port);
+
+var server = http.createServer(app);
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+function normalizePort(val) {
+    let port = parseInt(val, 10);
+
+    if (isNaN(port)) {
+        // named pipe
+        return val;
+    }
+
+    if (port >= 0) {
+        // port number
+        return port;
+    }
+
+    return false;
+}
+
+function onError(error) {
+    if (error.syscall !== 'listen') {
+        throw error;
+    }
+
+    let bind = typeof port === 'string'
+        ? 'Pipe ' + port
+        : 'Port ' + port
+
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+        case 'EACCES':
+            console.error(bind + ' requires elevated privileges');
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            console.error(bind + ' is already in use');
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
+}
+
+function onListening() {
+    let addr = server.address();
+    let bind = typeof addr === 'string'
+        ? 'pipe ' + addr
+        : 'port ' + addr.port;
+    let config = {
+        Network: addr,
         MongoDB_Host: process.env.MONGODB_HOST || 'localhost',
         MongoDB_Port: process.env.MONGODB_PORT || '27017',
-        MongoDB_Database: process.env.MONGODB_DATABASE || 'VITfaculty',
+        MongoDB_Database: process.env.MONGODB_DATABASE || 'VITauth',
         MongoDB_Username: process.env.MONGODB_USERNAME || '',
         MongoDB_Password: process.env.MONGODB_PASSWORD || '',
         NewRelic: process.env.NEWRELIC_APP_NAME && process.env.NEWRELIC_LICENSE ? true : false
@@ -50,7 +107,5 @@ var onBind = function () {
     if (log) {
         log.log('info', config);
     }
-    console.log('Express.js Server started, Config: ' + JSON.stringify(config));
-};
-
-var server = app.listen(app.get('port'), onBind);
+    console.log('VITauth API Server started on ' + bind + ' , Config: ' + JSON.stringify(config));
+}

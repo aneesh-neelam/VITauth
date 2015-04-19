@@ -1,7 +1,8 @@
-<!--
-  VITacademics - Faculty
-  Copyright (C) 2014  Aneesh Neelam <neelam.aneesh@gmail.com>
-  Copyright (C) 2014  Kishore Narendran <kishore.narendran09@gmail.com>
+//
+  VITauth
+  Copyright (C) 2015  Kishore Narendran <kishore.narendran09@gmail.com>
+  Copyright (C) 2015  Aneesh Neelam <neelam.aneesh@gmail.com>
+  Copyright (C) 2015  Aarthy Kolachalam Chandrasekhar <kcaarthy@gmail.com>
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -15,19 +16,12 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="author" content="Aneesh Neelam <neelam.aneesh@gmail.com>"/>
-    <title>Error | VITacademics-Faculty</title>
-</head>
-<body>
-<h1><%= message %></h1>
+doctype html
 
-<h2><%= status %></h2>
-<pre><%= stack %></pre>
-</body>
-</html>
+html(lang='en')
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    block content
