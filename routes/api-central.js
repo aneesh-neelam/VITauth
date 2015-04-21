@@ -229,7 +229,7 @@ var addStudent = function (req, res) {
       res.json({status: 'failure'});
     }
   };
-  req.db.collection('students').findOne({regno: regno}, onStudentFind);
+  req.db.collection('students').findOne({register_number: registerNumber}, onStudentFind);
 };
 
 var bulkAddStudent = function (req, res) {
