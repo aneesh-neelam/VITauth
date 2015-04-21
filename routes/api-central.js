@@ -166,6 +166,7 @@ var addClass = function (req, res) {
 var addStudent = function (req, res) {
   var regno = req.body.regno;
   var name = req.body.name;
+  var rfid = req.body.rfid;
   var onInsert = function (err, records) {
     if (err) {
       res.json({status: 'failure'});
@@ -179,7 +180,7 @@ var addStudent = function (req, res) {
       res.json({status: 'failure'});
     }
     else if (result == null) {
-      req.db.collection('students').insert({name: name, regno: regno}, onInsert);
+      req.db.collection('students').insert({name: name, regno: regno, rfid: rfid}, onInsert);
     }
     else {
       res.json({status: 'failure'});
@@ -354,7 +355,6 @@ var addSemester = function (req, res) {
 
 router.post('/addteacher', addTeacher);
 router.post('/addclass', addClass);
-router.post('/bulkaddclass', bulkAddClass);
 router.post('/addsemester', addSemester);
 router.post('/addexam', addExam);
 router.post('/bulkaddexam', bulkAddExam);
