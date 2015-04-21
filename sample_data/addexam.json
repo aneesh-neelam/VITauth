@@ -6,19 +6,19 @@
   "time": "forenoon",
   "classes": [
     {
-      "cnum": 1234,
+      "class_number": 1234,
       "students": [
-        {"regno": "11BCE0094", "debarred": false, "seat": "L1"},
-        {"regno": "11BCE0350", "debarred": false, "seat": "L2"},
-        {"regno": "11BCE0260", "debarred": true, "seat": "L3"}
+        {"register_number": "11BCE0094", "debarred": false, "seat": "L1"},
+        {"register_number": "11BCE0350", "debarred": false, "seat": "L2"},
+        {"register_number": "11BCE0260", "debarred": true, "seat": "L3"}
       ]
     },
     {
-      "cnum": 1236,
+      "class_number": 1236,
       "students": [
-        {"regno": "11BCE0354", "debarred": false, "seat": "R1"},
-        {"regno": "11BCE0088", "debarred": false, "seat": "R2"},
-        {"regno": "11BCE0375", "debarred": true, "seat": "R3"}
+        {"register_number": "11BCE0354", "debarred": false, "seat": "R1"},
+        {"register_number": "11BCE0088", "debarred": false, "seat": "R2"},
+        {"register_number": "11BCE0375", "debarred": true, "seat": "R3"}
       ]
     }
   ],

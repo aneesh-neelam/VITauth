@@ -21,6 +21,7 @@
 'use strict';
 
 var express = require('express');
+var async = require('async');
 
 var router = express.Router();
 
@@ -31,19 +32,69 @@ var getExamInfo = function (req, res) {
   var venue = req.body.venue;
   var time = req.body.time;
   var employeeID = req.body.employee_id;
-  var onClassFind = function (err, result) {
+  var classes;
+  var classesInfo;
+  var studentsInfo;
+  var onFindStudentComplete = function(err, result) {
+    if(err) {
+      res.json({status: 'failure'});
+    }
+    else {
+      studentsInfo = result;
+      for(var i = 0; i < classes.length; i++) {
+        for(var j = 0; j < classesInfo.length; j++) {
+          if(classes[i].class_number == classesInfo[j].class_number) {
+            classes[i].title = classesInfo[j].title;
+            classes[i].code = classesInfo[j].code;
+            break;
+          }
+        }
+        for(var j = 0; j < classes[i].students.length; j++) {
+          for(var k = 0; k < studentsInfo.length; k++) {
+            if (classes[i].students[j].register_number == studentsInfo[k].register_number) {
+              classes[i].students[j].name = studentsInfo[k].name;
+              break;
+            }
+          }
+        }
+      }
+      res.json({status: 'success', classes: classes});
+    }
+  };
+  var onFindStudent = function(eachStudent, callback) {
+    req.db.collection('students').findOne({register_number: eachStudent}, callback);
+  };
+  var onFindClassComplete = function(err, result) {
+    if(err) {
+      res.json({status: 'failure'});
+    }
+    else {
+      classesInfo = result;
+      var students = [];
+      for(let i = 0; i < classesInfo.length; i++) {
+        for(let j = 0; j < classesInfo[i].students.length; j++) {
+          students.push(classesInfo[i].students[j].register_number);
+        }
+      }
+      async.map(students, onFindStudent, onFindStudentComplete);
+    }
+  };
+  var onFindClass = function(eachClass, callback) {
+    req.db.collection('classes').findOne({class_number: eachClass.class_number}, callback);
+  };
+  var onFindExam = function (err, result) {
     if (err) {
       res.json({status: 'failure'})
     }
     else {
       var allowedEmpids = result.employee_ids;
       if (allowedEmpids.indexOf(employeeID) > -1) {
-        res.json({status: 'success', classes: result.classes});
+        classes = result.classes;
+        async.map(result.classes, onFindClass, onFindClassComplete);
       }
       else {
         res.json({status: 'failure'});
       }
-
     }
   };
   req.db.collection('exams').findOne({
@@ -52,8 +103,10 @@ var getExamInfo = function (req, res) {
     slot: slot,
     venue: venue,
     time: time
-  }, onClassFind);
+  }, onFindExam);
 };
+
+
 var submitExamReport = function (req, res) {
   var semester = req.body.semester;
   var exam = req.body.exam;
