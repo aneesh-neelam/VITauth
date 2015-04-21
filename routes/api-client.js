@@ -22,6 +22,8 @@
 
 var express = require('express');
 var async = require('async');
+var path = require('path');
+
 
 var status = require(path.join(__dirname, '..', 'status'));
 
