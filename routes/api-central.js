@@ -63,15 +63,15 @@ var addExam = function (req, res) {
   var employeeIDs = req.body.employee_ids;
   var onInsert = function (err, records) {
     if (err) {
-      res.json({status: 'failure'});
+      res.json({result: status.failure});
     }
     else {
-      res.json({status: 'success'});
+      res.json({result: status.success});
     }
   };
   var onExamFind = function (err, result) {
     if (err) {
-      res.json({status: 'failure'});
+      res.json({result: status.failure});
     }
     else if (result == null) {
       req.db.collection('exams').insert({
@@ -85,7 +85,7 @@ var addExam = function (req, res) {
       }, onInsert);
     }
     else {
-      res.json({status: 'failure'});
+      res.json({result: status.failure});
     }
   };
   req.db.collection('exams').findOne({semester: semester, exam: exam, slot: slot, venue: venue}, onExamFind);
@@ -95,13 +95,13 @@ var bulkAddExam = function (req, res) {
   var exams = req.body.exams;
   var onComplete = function (err, result) {
     if (err) {
-      res.json({status: 'failure'});
+      res.json({result: status.failure});
     }
     else if (result.length == exams.length) {
-      res.json({status: 'success'});
+      res.json({result: status.success});
     }
     else {
-      res.json({status: 'failure'});
+      res.json({result: status.failure});
     }
   };
   var onExamAdd = function (exam, callback) {
@@ -212,21 +212,21 @@ var addStudent = function (req, res) {
   var rfid = req.body.rfid;
   var onInsert = function (err, records) {
     if (err) {
-      res.json({status: 'failure'});
+      res.json({result: status.failure});
     }
     else {
-      res.json({status: 'success'});
+      res.json({result: status.success});
     }
   };
   var onStudentFind = function (err, result) {
     if (err) {
-      res.json({status: 'failure'});
+      res.json({result: status.failure});
     }
     else if (result == null) {
       req.db.collection('students').insert({name: name, register_number: registerNumber, rfid: rfid}, onInsert);
     }
     else {
-      res.json({status: 'failure'});
+      res.json({result: status.failure});
     }
   };
   req.db.collection('students').findOne({register_number: registerNumber}, onStudentFind);
@@ -236,13 +236,13 @@ var bulkAddStudent = function (req, res) {
   var students = req.body.students;
   var onComplete = function (err, result) {
     if (err) {
-      res.json({status: 'failure'});
+      res.json({result: status.failure});
     }
     else if (result.length == students.length) {
-      res.json({status: 'success'});
+      res.json({result: status.success});
     }
     else {
-      res.json({status: 'failure'});
+      res.json({result: status.failure});
     }
   };
   var onStudentAdd = function (student, callback) {
@@ -256,15 +256,15 @@ var uploadPhotoAction = function (req, res) {
   var path = os.tmpDir() + req.files.studentPhoto.name;
   var onUpdate = function (err, result) {
     if (err) {
-      res.json({status: 'failure'});
+      res.json({result: status.failure});
     }
     else {
-      res.json({status: 'success'});
+      res.json({result: status.success});
     }
   };
   var onFileRead = function (err, data) {
     if (err) {
-      res.json({status: 'failure'});
+      res.json({result: status.failure});
     }
     else {
       req.db.collection('students').update({register_number: registerNumber}, {$set: {photo: data}}, onUpdate);
@@ -278,15 +278,15 @@ var uploadFingerprintAction = function (req, res) {
   var path = os.tmpDir() + req.files.studentFingerprint.name;
   var onUpdate = function (err, result) {
     if (err) {
-      res.json({status: 'failure'});
+      res.json({result: status.failure});
     }
     else {
-      res.json({status: 'success'});
+      res.json({result: status.success});
     }
   };
   var onFileRead = function (err, data) {
     if (err) {
-      res.json({status: 'failure'});
+      res.json({result: status.failure});
     }
     else {
       req.db.collection('students').update({register_number: registerNumber}, {$Set: {fingerprint: data}}, onUpdate);

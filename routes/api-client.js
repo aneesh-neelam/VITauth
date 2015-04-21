@@ -23,6 +23,8 @@
 var express = require('express');
 var async = require('async');
 
+var status = require(path.join(__dirname, '..', 'status'));
+
 var router = express.Router();
 
 var getExamInfo = function (req, res) {
@@ -37,7 +39,7 @@ var getExamInfo = function (req, res) {
   var studentsInfo;
   var onFindStudentComplete = function(err, result) {
     if(err) {
-      res.json({status: 'failure'});
+      res.json({result: status.failure});
     }
     else {
       studentsInfo = result;
@@ -58,7 +60,7 @@ var getExamInfo = function (req, res) {
           }
         }
       }
-      res.json({status: 'success', classes: classes});
+      res.json({result: status.success, classes: classes});
     }
   };
   var onFindStudent = function(eachStudent, callback) {
@@ -66,7 +68,7 @@ var getExamInfo = function (req, res) {
   };
   var onFindClassComplete = function(err, result) {
     if(err) {
-      res.json({status: 'failure'});
+      res.json({result: status.failure});
     }
     else {
       classesInfo = result;
@@ -84,7 +86,7 @@ var getExamInfo = function (req, res) {
   };
   var onFindExam = function (err, result) {
     if (err) {
-      res.json({status: 'failure'})
+      res.json({result: status.failure})
     }
     else {
       var allowedEmpids = result.employee_ids;
@@ -93,7 +95,7 @@ var getExamInfo = function (req, res) {
         async.map(result.classes, onFindClass, onFindClassComplete);
       }
       else {
-        res.json({status: 'failure'});
+        res.json({result: status.failure});
       }
     }
   };
@@ -116,10 +118,10 @@ var submitExamReport = function (req, res) {
   var classes = req.body.classes;
   var onInsert = function (err, result) {
     if (err) {
-      res.json({status: 'failure'})
+      res.json({result: status.failure})
     }
     else {
-      res.json({status: 'success'});
+      res.json({result: status.success});
     }
   };
   req.db.collection('reports').insert({
