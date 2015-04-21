@@ -162,7 +162,50 @@ var addClass = function (req, res) {
       res.json({result: status.success});
     }
   };
-  
+  var onSemesterFind = function (err, result) {
+    if (err) {
+      res.json({result: status.failure});
+    }
+    else if (result == null) {
+      res.json({result: status.semesterNotFound});
+    }
+    else {
+      var instructionalDates = result.class_dates;
+      for (let i = 0; i < days.length; i++) {
+        let day = days[i];
+        classDates.push.apply(classDates, instructionalDates[day]);
+      }
+      for (let i = 0; i < classDates.length; i++) {
+        for (let j = 0; j < classDates.length - 1 - i; j++) {
+          if (moment(classDates[j]).diff(moment(classDates[j + 1])) > 0) {
+            var temp = classDates[j];
+            classDates[j] = classDates[j + 1];
+            classDates[j + 1] = temp;
+          }
+        }
+      }
+      req.db.collection('classes').update({class_number: classNumber}, {
+        $set: {
+          class_number: classNumber,
+          students: students,
+          title: title,
+          code: code,
+          slot: slot,
+          venue: venue,
+          units: units,
+          class_dates: classDates,
+          type: type,
+          total: 0,
+          history: [],
+          exams: []
+        }
+      }, {upsert: true}, onInsert);
+    }
+  };
+  req.db.collection('semesters').findOne({semester: semester}, onSemesterFind);
+
+};
+
 var addStudent = function (req, res) {
   var regno = req.body.regno;
   var name = req.body.name;
@@ -250,50 +293,6 @@ var uploadFingerprintAction = function (req, res) {
     }
   };
   fs.readFile(path, onFileRead);
-};
-
-  var onSemesterFind = function (err, result) {
-    if (err) {
-      res.json({result: status.failure});
-    }
-    else if (result == null) {
-      res.json({result: status.semesterNotFound});
-    }
-    else {
-      var instructionalDates = result.class_dates;
-      for (let i = 0; i < days.length; i++) {
-        let day = days[i];
-        classDates.push.apply(classDates, instructionalDates[day]);
-      }
-      for (let i = 0; i < classDates.length; i++) {
-        for (let j = 0; j < classDates.length - 1 - i; j++) {
-          if (moment(classDates[j]).diff(moment(classDates[j + 1])) > 0) {
-            var temp = classDates[j];
-            classDates[j] = classDates[j + 1];
-            classDates[j + 1] = temp;
-          }
-        }
-      }
-      req.db.collection('classes').update({class_number: classNumber}, {
-        $set: {
-          class_number: classNumber,
-          students: students,
-          title: title,
-          code: code,
-          slot: slot,
-          venue: venue,
-          units: units,
-          class_dates: classDates,
-          type: type,
-          total: 0,
-          history: [],
-          exams: []
-        }
-      }, {upsert: true}, onInsert);
-    }
-  };
-  req.db.collection('semesters').findOne({semester: semester}, onSemesterFind);
-
 };
 
 var addSemester = function (req, res) {
