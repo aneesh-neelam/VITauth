@@ -30,14 +30,14 @@ var getExamInfo = function (req, res) {
   var slot = req.body.slot;
   var venue = req.body.venue;
   var time = req.body.time;
-  var empid = parseInt(req.body.empid);
+  var employeeID = req.body.employee_id;
   var onClassFind = function (err, result) {
     if (err) {
       res.json({status: 'failure'})
     }
     else {
-      var allowedEmpids = result.empids;
-      if (allowedEmpids.indexOf(empid) > -1) {
+      var allowedEmpids = result.employee_ids;
+      if (allowedEmpids.indexOf(employeeID) > -1) {
         res.json({status: 'success', classes: result.classes});
       }
       else {
