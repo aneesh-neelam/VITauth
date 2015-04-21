@@ -1,0 +1,10 @@
+{
+  "semester": "FS14",
+  "class_number": 1234,
+  "register_numbers": ["11BCE0094", "11BCE0350", "11BCE0260"],
+  "title": "Computer Programming and Problem Solving",
+  "code": "CSE 101",
+  "slot": "G1",
+  "venue": "SJT 301",
+  "type": "Embedded Theory"
+}

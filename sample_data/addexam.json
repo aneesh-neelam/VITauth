@@ -1,0 +1,26 @@
+{
+  "semester": "FS14",
+  "exam": "CAT1",
+  "slot": "G1",
+  "venue": "SJT 421",
+  "time": "forenoon",
+  "classes": [
+    {
+      "cnum": 1234,
+      "students": [
+        {"regno": "11BCE0094", "debarred": false, "seat": "L1"},
+        {"regno": "11BCE0350", "debarred": false, "seat": "L2"},
+        {"regno": "11BCE0260", "debarred": true, "seat": "L3"}
+      ]
+    },
+    {
+      "cnum": 1236,
+      "students": [
+        {"regno": "11BCE0354", "debarred": false, "seat": "R1"},
+        {"regno": "11BCE0088", "debarred": false, "seat": "R2"},
+        {"regno": "11BCE0375", "debarred": true, "seat": "R3"}
+      ]
+    }
+  ],
+  "employee_ids": [10000, 10001]
+}

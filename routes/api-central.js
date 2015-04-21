@@ -60,7 +60,7 @@ var addExam = function (req, res) {
   var venue = req.body.venue;
   var time = req.body.time;
   var classes = req.body.classes;
-  var empids = req.body.empids;
+  var employeeIDs = req.body.employee_ids;
   var onInsert = function (err, records) {
     if (err) {
       res.json({status: 'failure'});
@@ -81,7 +81,7 @@ var addExam = function (req, res) {
         venue: venue,
         time: time,
         classes: classes,
-        empids: empids
+        employee_ids: employeeIDs
       }, onInsert);
     }
     else {
@@ -207,7 +207,7 @@ var addClass = function (req, res) {
 };
 
 var addStudent = function (req, res) {
-  var regno = req.body.regno;
+  var registerNumber = req.body.register_number;
   var name = req.body.name;
   var rfid = req.body.rfid;
   var onInsert = function (err, records) {
@@ -223,7 +223,7 @@ var addStudent = function (req, res) {
       res.json({status: 'failure'});
     }
     else if (result == null) {
-      req.db.collection('students').insert({name: name, regno: regno, rfid: rfid}, onInsert);
+      req.db.collection('students').insert({name: name, register_number: registerNumber, rfid: rfid}, onInsert);
     }
     else {
       res.json({status: 'failure'});
@@ -252,7 +252,7 @@ var bulkAddStudent = function (req, res) {
 };
 
 var uploadPhotoAction = function (req, res) {
-  var regno = req.files.studentPhoto.originalname.split('.')[0];
+  var registerNumber = req.files.studentPhoto.originalname.split('.')[0];
   var path = os.tmpDir() + req.files.studentPhoto.name;
   var onUpdate = function (err, result) {
     if (err) {
@@ -267,14 +267,14 @@ var uploadPhotoAction = function (req, res) {
       res.json({status: 'failure'});
     }
     else {
-      req.db.collection('students').update({regno: regno}, {photo: data}, onUpdate);
+      req.db.collection('students').update({register_number: registerNumber}, {$set: {photo: data}}, onUpdate);
     }
   };
   fs.readFile(path, onFileRead);
 };
 
 var uploadFingerprintAction = function (req, res) {
-  var regno = req.files.studentFingerprint.originalname.split('.')[0];
+  var registerNumber = req.files.studentFingerprint.originalname.split('.')[0];
   var path = os.tmpDir() + req.files.studentFingerprint.name;
   var onUpdate = function (err, result) {
     if (err) {
@@ -289,7 +289,7 @@ var uploadFingerprintAction = function (req, res) {
       res.json({status: 'failure'});
     }
     else {
-      req.db.collection('students').update({regno: regno}, {fingerprint: data}, onUpdate);
+      req.db.collection('students').update({register_number: registerNumber}, {$Set: {fingerprint: data}}, onUpdate);
     }
   };
   fs.readFile(path, onFileRead);
