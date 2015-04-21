@@ -53,6 +53,63 @@ var addTeacher = function (req, res) {
   }, {upsert: true}, onInsert);
 };
 
+var addExam = function (req, res) {
+  var semester = req.body.semester;
+  var exam = req.body.exam;
+  var slot = req.body.slot;
+  var venue = req.body.venue;
+  var time = req.body.time;
+  var classes = req.body.classes;
+  var empids = req.body.empids;
+  var onInsert = function (err, records) {
+    if (err) {
+      res.json({status: 'failure'});
+    }
+    else {
+      res.json({status: 'success'});
+    }
+  };
+  var onExamFind = function (err, result) {
+    if (err) {
+      res.json({status: 'failure'});
+    }
+    else if (result == null) {
+      req.db.collection('exams').insert({
+        semester: semester,
+        exam: exam,
+        slot: slot,
+        venue: venue,
+        time: time,
+        classes: classes,
+        empids: empids
+      }, onInsert);
+    }
+    else {
+      res.json({status: 'failure'});
+    }
+  };
+  req.db.collection('exams').findOne({semester: semester, exam: exam, slot: slot, venue: venue}, onExamFind);
+};
+
+var bulkAddExam = function (req, res) {
+  var exams = req.body.exams;
+  var onComplete = function (err, result) {
+    if (err) {
+      res.json({status: 'failure'});
+    }
+    else if (result.length == exams.length) {
+      res.json({status: 'success'});
+    }
+    else {
+      res.json({status: 'failure'});
+    }
+  };
+  var onExamAdd = function (exam, callback) {
+    req.db.collection('exams').insert(exam, callback);
+  };
+  async.map(exams, onExamAdd, onComplete);
+};
+
 var addClass = function (req, res) {
   var semester = req.body.semester;
   var registerNumbers = req.body.register_numbers;
@@ -105,6 +162,95 @@ var addClass = function (req, res) {
       res.json({result: status.success});
     }
   };
+  
+var addStudent = function (req, res) {
+  var regno = req.body.regno;
+  var name = req.body.name;
+  var onInsert = function (err, records) {
+    if (err) {
+      res.json({status: 'failure'});
+    }
+    else {
+      res.json({status: 'success'});
+    }
+  };
+  var onStudentFind = function (err, result) {
+    if (err) {
+      res.json({status: 'failure'});
+    }
+    else if (result == null) {
+      req.db.collection('students').insert({name: name, regno: regno}, onInsert);
+    }
+    else {
+      res.json({status: 'failure'});
+    }
+  };
+  req.db.collection('students').findOne({regno: regno}, onStudentFind);
+};
+
+var bulkAddStudent = function (req, res) {
+  var students = req.body.students;
+  var onComplete = function (err, result) {
+    if (err) {
+      res.json({status: 'failure'});
+    }
+    else if (result.length == students.length) {
+      res.json({status: 'success'});
+    }
+    else {
+      res.json({status: 'failure'});
+    }
+  };
+  var onStudentAdd = function (student, callback) {
+    req.db.collection('students').insert(student, callback);
+  };
+  async.map(students, onStudentAdd, onComplete);
+};
+
+var uploadPhotoAction = function (req, res) {
+  var regno = req.files.studentPhoto.originalname.split('.')[0];
+  var path = os.tmpDir() + req.files.studentPhoto.name;
+  var onUpdate = function (err, result) {
+    if (err) {
+      res.json({status: 'failure'});
+    }
+    else {
+      res.json({status: 'success'});
+    }
+  };
+  var onFileRead = function (err, data) {
+    if (err) {
+      res.json({status: 'failure'});
+    }
+    else {
+      req.db.collection('students').update({regno: regno}, {photo: data}, onUpdate);
+    }
+  };
+  fs.readFile(path, onFileRead);
+};
+
+var uploadFingerprintAction = function (req, res) {
+  var regno = req.files.studentFingerprint.originalname.split('.')[0];
+  var path = os.tmpDir() + req.files.studentFingerprint.name;
+  var onUpdate = function (err, result) {
+    if (err) {
+      res.json({status: 'failure'});
+    }
+    else {
+      res.json({status: 'success'});
+    }
+  };
+  var onFileRead = function (err, data) {
+    if (err) {
+      res.json({status: 'failure'});
+    }
+    else {
+      req.db.collection('students').update({regno: regno}, {fingerprint: data}, onUpdate);
+    }
+  };
+  fs.readFile(path, onFileRead);
+};
+
   var onSemesterFind = function (err, result) {
     if (err) {
       res.json({result: status.failure});
@@ -208,6 +354,13 @@ var addSemester = function (req, res) {
 
 router.post('/addteacher', addTeacher);
 router.post('/addclass', addClass);
+router.post('/bulkaddclass', bulkAddClass);
 router.post('/addsemester', addSemester);
+router.post('/addexam', addExam);
+router.post('/bulkaddexam', bulkAddExam);
+router.post('/addstudent', addStudent);
+router.post('/bulkaddstudent', bulkAddStudent);
+router.post('/uploadphoto', uploadPhotoAction);
+router.post('/uploadfingerprint', uploadFingerprintAction);
 
 module.exports = router;

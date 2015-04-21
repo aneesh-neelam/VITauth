@@ -45,7 +45,6 @@ if (process.env.LOGENTRIES_TOKEN) {
 
 var webRoutes = require(path.join(__dirname, 'routes', 'web'));
 var apiClientRoutes = require(path.join(__dirname, 'routes', 'api-client'));
-var apiVITRoutes = require(path.join(__dirname, 'routes', 'api-vit'));
 var apiCentral = require(path.join(__dirname, 'routes', 'api-central'));
 var apiClientFaculty = require(path.join(__dirname, 'routes', 'api-client-faculty'));
 
@@ -119,7 +118,6 @@ app.use(mongodb(require('mongodb'), mongodbOptions));
 app.use('/', webRoutes);
 app.use('/api/central', apiCentral);
 app.use('/api/client/faculty', apiClientFaculty);
-app.use('/api/vit', apiVITRoutes);
 app.use('/api/client', apiClientRoutes);
 
 // catch 404 and forward to error handler
