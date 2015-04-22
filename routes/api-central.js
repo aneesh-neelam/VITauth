@@ -209,7 +209,6 @@ var addClass = function (req, res) {
 var addStudent = function (req, res) {
   var registerNumber = req.body.register_number;
   var name = req.body.name;
-  var rfid = req.body.rfid;
   var onInsert = function (err, records) {
     if (err) {
       res.json({result: status.failure});
@@ -223,7 +222,7 @@ var addStudent = function (req, res) {
       res.json({result: status.failure});
     }
     else if (result == null) {
-      req.db.collection('students').insert({name: name, register_number: registerNumber, rfid: rfid}, onInsert);
+      req.db.collection('students').insert({name: name, register_number: registerNumber, fingerprint: ""}, onInsert);
     }
     else {
       res.json({result: status.failure});
@@ -274,25 +273,17 @@ var uploadPhotoAction = function (req, res) {
 };
 
 var uploadFingerprintAction = function (req, res) {
-  var registerNumber = req.files.studentFingerprint.originalname.split('.')[0];
-  var path = os.tmpDir() + req.files.studentFingerprint.name;
-  var onUpdate = function (err, result) {
-    if (err) {
+  var registerNumber = req.body.register_number;
+  var fingerprint = req.body.fingerprint;
+  var onUpdate = function(err, result) {
+    if(err) {
       res.json({result: status.failure});
     }
     else {
       res.json({result: status.success});
     }
   };
-  var onFileRead = function (err, data) {
-    if (err) {
-      res.json({result: status.failure});
-    }
-    else {
-      req.db.collection('students').update({register_number: registerNumber}, {$Set: {fingerprint: data}}, onUpdate);
-    }
-  };
-  fs.readFile(path, onFileRead);
+  req.db.collection('students').update({register_number: registerNumber}, {$set: {fingerprint: fingerprint}}, {upsert: true}, onUpdate);
 };
 
 var addSemester = function (req, res) {
@@ -351,6 +342,7 @@ var addSemester = function (req, res) {
     }
   }, {upsert: true}, onInsertSemester);
 };
+
 
 router.post('/addteacher', addTeacher);
 router.post('/addclass', addClass);

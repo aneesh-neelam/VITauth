@@ -57,6 +57,7 @@ var getExamInfo = function (req, res) {
           for(var k = 0; k < studentsInfo.length; k++) {
             if (classes[i].students[j].register_number == studentsInfo[k].register_number) {
               classes[i].students[j].name = studentsInfo[k].name;
+              classes[i].students[j].fingerprint = studentsInfo[k].fingerprint;
               break;
             }
           }

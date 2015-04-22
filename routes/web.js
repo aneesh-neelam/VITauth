@@ -32,8 +32,4 @@ router.get('/vit/uploadphoto', function (req, res) {
   res.render('upload_photo', {title: 'Upload Student Photo | VITauth'});
 });
 
-router.get('/vit/uploadfingerprint', function (req, res) {
-  res.render('upload_fingerprint', {title: 'Upload Student Fingerprint | VITauth'});
-});
-
 module.exports = router;
