@@ -209,7 +209,7 @@ var addClass = function (req, res) {
 var addStudent = function (req, res) {
   var registerNumber = req.body.register_number;
   var name = req.body.name;
-  var onInsert = function (err, records) {
+  var onUpdate = function (err, records) {
     if (err) {
       res.json({result: status.failure});
     }
@@ -217,18 +217,7 @@ var addStudent = function (req, res) {
       res.json({result: status.success});
     }
   };
-  var onStudentFind = function (err, result) {
-    if (err) {
-      res.json({result: status.failure});
-    }
-    else if (result == null) {
-      req.db.collection('students').insert({name: name, register_number: registerNumber, fingerprint: ""}, onInsert);
-    }
-    else {
-      res.json({result: status.failure});
-    }
-  };
-  req.db.collection('students').findOne({register_number: registerNumber}, onStudentFind);
+  req.db.collection('students').update({register_number: registerNumber}, {$set: {register_number: registerNumber, name: name}}, {upsert:true}, onUpdate);
 };
 
 var bulkAddStudent = function (req, res) {
