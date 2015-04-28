@@ -89,7 +89,10 @@ var getExamInfo = function (req, res) {
   };
   var onFindExam = function (err, result) {
     if (err) {
-      res.json({result: status.failure})
+      res.json({result: status.failure});
+    }
+    else if(result == null) {
+      res.json({result: status.failure});
     }
     else {
       var allowedEmpids = result.employee_ids;
