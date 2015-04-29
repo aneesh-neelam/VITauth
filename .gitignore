@@ -28,3 +28,9 @@ node_modules/
 
 # Users Environment Variables
 .lock-wscript
+
+
+# OS related unnecessary things
+thumbs.db
+.DS_Store
+
