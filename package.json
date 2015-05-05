@@ -1,6 +1,6 @@
 {
   "name": "VITauth",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "An API server for the VIT University adminstration and faculty",
   "homepage": "https://vitauth.herokuapp.com/",
   "bugs": {
@@ -24,7 +24,7 @@
     }
   ],
   "engines": {
-    "iojs": "stable"
+    "iojs": "1.x"
   },
   "contributors": [
     {
