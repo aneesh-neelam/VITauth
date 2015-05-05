@@ -1,6 +1,6 @@
 {
   "name": "VITauth",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "An API server for the VIT University adminstration and faculty",
   "homepage": "https://vitauth.herokuapp.com/",
   "bugs": {
@@ -49,10 +49,10 @@
     "express-mongo-db": "1.0.0",
     "jade": "1.9.2",
     "moment": "2.10.2",
-    "mongodb": "2.0.27",
+    "mongodb": "2.0.28",
     "morgan": "1.5.2",
     "multer": "0.1.8",
-    "newrelic": "1.18.3",
+    "newrelic": "1.18.5",
     "node-logentries": "0.1.4",
     "serve-favicon": "2.2.0"
   },
