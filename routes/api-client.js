@@ -130,14 +130,13 @@ var submitExamReport = function (req, res) {
       res.json({result: status.success});
     }
   };
-  req.db.collection('reports').insert({
+  req.db.collection('reports').update({
     semester: semester,
     exam: exam,
     slot: slot,
     venue: venue,
-    time: time,
-    classes: classes
-  }, onInsert);
+    time: time
+  }, {$set: {classes: classes }}, {upsert:true}, onInsert);
 
 };
 
